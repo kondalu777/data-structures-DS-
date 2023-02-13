@@ -1,0 +1,44 @@
+def Kruskal(graph):
+    result = []  # To store the final minimum spanning tree
+    i = 0  # An index variable used to pick next edge
+    e = 0  # An index variable used to count edges
+
+    graph = sorted(graph, key=lambda item: item[2])
+
+    parent = []
+    rank = []
+
+    for node in range(len(graph)):
+        parent.append(node)
+        rank.append(0)
+
+    while e < len(graph) - 1:
+        u, v, w = graph[i]
+        i = i + 1
+        x = find(parent, u)
+        y = find(parent, v)
+
+        if x != y:
+            e = e + 1     
+            result.append([u, v, w])
+            union(parent, rank, x, y)
+
+    return result
+
+def find(parent, i):
+    if parent[i] == i:
+        return i
+    return find(parent, parent[i])
+
+def union(parent, rank, x, y):
+    root1 = find(parent, x)
+    root2 = find(parent, y)
+
+    if root1 != root2:
+        if rank[root1] < rank[root2]:
+            parent[root1] = root2
+        elif rank[root1] > rank[root2]:
+            parent[root2] = root1
+        else :
+            parent[root2] = root1
+            rank[root1] += 1
