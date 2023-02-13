@@ -1,0 +1,58 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define INFINITY 9999
+#define MAX 100
+
+int adj[MAX][MAX];
+int distance[MAX];
+int visited[MAX];
+int n;
+
+int min_distance(int distance[], int visited[]) {
+  int min = INFINITY, min_index, v;
+  for (v = 1; v <= n; v++) {
+    if (visited[v] == 0 && distance[v] <= min) {
+      min = distance[v];
+      min_index = v;
+    }
+  }
+  return min_index;
+}
+
+void dijkstra(int start) {
+  int i, count, v, u;
+  for (i = 1; i <= n; i++) {
+    distance[i] = INFINITY;
+    visited[i] = 0;
+  }
+  distance[start] = 0;
+  for (count = 1; count < n; count++) {
+    u = min_distance(distance, visited);
+    visited[u] = 1;
+    for (v = 1; v <= n; v++) {
+      if (!visited[v] && adj[u][v] && distance[u] != INFINITY && distance[u] + adj[u][v] < distance[v]) {
+        distance[v] = distance[u] + adj[u][v];
+      }
+    }
+  }
+}
+
+int main() {
+  int i, j, start;
+  printf("Enter number of vertices: ");
+  scanf("%d", &n);
+  printf("Enter the adjacency matrix:\n");
+  for (i = 1; i <= n; i++) {
+    for (j = 1; j <= n; j++) {
+      scanf("%d", &adj[i][j]);
+    }
+  }
+  printf("Enter the starting vertex: ");
+  scanf("%d", &start);
+  dijkstra(start);
+  printf("The shortest distances are:\n");
+  for (i = 1; i <= n; i++) {
+    printf("%d -> %d: %d\n", start, i, distance[i]);
+  }
+  return 0;
+}
