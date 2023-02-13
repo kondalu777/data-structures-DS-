@@ -1,0 +1,85 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+  int data;
+  struct Node *next;
+};
+
+struct Node *head = NULL;
+
+void insertAtStart(int newData) {
+  struct Node *newNode = (struct Node*)malloc(sizeof(struct Node));
+  newNode->data = newData;
+  newNode->next = head;
+  head = newNode;
+}
+
+void insertAtEnd(int newData) {
+  struct Node *newNode = (struct Node*)malloc(sizeof(struct Node));
+  struct Node *last = head;
+  newNode->data = newData;
+  newNode->next = NULL;
+  if (head == NULL) {
+    head = newNode;
+    return;
+  }
+  while (last->next != NULL) {
+    last = last->next;
+  }
+  last->next = newNode;
+}
+
+void deleteAtStart() {
+  if (head == NULL) {
+    printf("Linked List is already empty.\n");
+    return;
+  }
+  struct Node *temp = head;
+  head = head->next;
+  free(temp);
+}
+
+void deleteAtEnd() {
+  if (head == NULL) {
+    printf("Linked List is already empty.\n");
+    return;
+  }
+  struct Node *last = head;
+  struct Node *prevToLast = NULL;
+  while (last->next != NULL) {
+    prevToLast = last;
+    last = last->next;
+  }
+  prevToLast->next = NULL;
+  free(last);
+}
+
+void printList() {
+  struct Node *temp = head;
+  while (temp != NULL) {
+    printf("%d ", temp->data);
+    temp = temp->next;
+  }
+  printf("\n");
+}
+
+int main() {
+  insertAtStart(3);
+  insertAtStart(2);
+  insertAtStart(1);
+  printf("Linked List after inserting at start: ");
+  printList();
+  insertAtEnd(4);
+  insertAtEnd(5);
+  insertAtEnd(6);
+  printf("Linked List after inserting at end: ");
+  printList();
+  deleteAtStart();
+  printf("Linked List after deleting from start: ");
+  printList();
+  deleteAtEnd();
+  printf("Linked List after deleting from end: ");
+  printList();
+  return 0;
+}
